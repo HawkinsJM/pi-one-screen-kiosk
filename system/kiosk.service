@@ -1,5 +1,5 @@
 [Unit]
-Description=Dual HDMI Kiosk Display
+Description=Single HDMI Kiosk Display
 After=network.target nginx.service systemd-user-sessions.service
 Wants=nginx.service
 
