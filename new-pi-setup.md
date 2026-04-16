@@ -39,12 +39,12 @@ Steps to set up a new Raspberry Pi kiosk from scratch.
 
 5. Clone the kiosk config repo:
    ```bash
-   gh repo clone HawkinsJM/pi-two-screen-kiosk
+   gh repo clone HawkinsJM/pi-one-screen-kiosk
    ```
 
 6. Run the setup script (installs all packages, fonts, services, and clones softsystems):
    ```bash
-   cd pi-two-screen-kiosk && bash setup.sh
+   cd pi-one-screen-kiosk && bash setup.sh
    ```
    > The script regenerates SSH host keys — this is only needed when duplicating an SD card image.
    > For a fresh flash it's harmless but will cause a host key warning on your next SSH connection.

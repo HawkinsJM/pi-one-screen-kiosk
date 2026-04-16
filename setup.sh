@@ -1,5 +1,5 @@
 #!/bin/bash
-# setup.sh — Run once on a fresh Raspberry Pi to install the two-screen kiosk.
+# setup.sh — Run once on a fresh Raspberry Pi to install the single-screen kiosk.
 # Usage: bash setup.sh
 
 set -e
