@@ -21,21 +21,28 @@ sleep 2
 # Auto-detect and enable connected output
 xrandr --auto
 
+# Pi 4 HDMI hotplug detection bug: HDMI-1 may show as disconnected even when active.
+# Force a mode on HDMI-1 if no outputs are detected as connected.
+if ! xrandr | grep -q " connected"; then
+    xrandr --newmode "1920x1080_60" 173.00 1920 2048 2248 2576 1080 1083 1088 1120 -hsync +vsync 2>/dev/null || true
+    xrandr --addmode HDMI-1 "1920x1080_60" 2>/dev/null || true
+    xrandr --output HDMI-1 --mode "1920x1080_60"
+fi
+
+# Determine active output (prefer connected, fall back to HDMI-1 for hotplug bug)
+OUTPUT=$(xrandr | awk '/ connected/ {print $1; exit}')
+OUTPUT="${OUTPUT:-HDMI-1}"
+
 # Apply rotation from kiosk.conf
-mapfile -t OUTPUTS < <(xrandr | awk '/ connected/ {print $1}')
-[[ -n "${OUTPUTS[0]}" ]] && xrandr --output "${OUTPUTS[0]}" --rotate "${DISPLAY1_ROTATE:-normal}"
+xrandr --output "${OUTPUT}" --rotate "${DISPLAY1_ROTATE:-normal}"
 
 # Give xrandr a moment to apply
 sleep 1
 
-# Re-read output after rotation
-mapfile -t OUTPUTS < <(xrandr | awk '/ connected/ {print $1}')
-
-# Detect resolution of the display
-OUTPUT="${OUTPUTS[0]:-HDMI-1}"
-W=$(xrandr | grep "^${OUTPUT} connected" | grep -oP '\d+x\d+' | head -1 | cut -dx -f1)
-H=$(xrandr | grep "^${OUTPUT} connected" | grep -oP '\d+x\d+' | head -1 | cut -dx -f2)
-W=${W:-1920}; H=${H:-1080}
+# Get screen dimensions from Screen 0 (reflects post-rotation size)
+read -r W H < <(xrandr | awk '/^Screen 0:.*current/ {
+    for (i=1;i<=NF;i++) if ($i=="current") { print $(i+1), $(i+3); break }
+}' | tr -d ',')
 
 chromium \
     --app="http://localhost/${DISPLAY1_SITE}" \
