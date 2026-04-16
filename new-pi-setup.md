@@ -9,9 +9,9 @@ Steps to set up a new Raspberry Pi kiosk from scratch.
 
 ## Steps
 
-1. Flash **Raspberry Pi OS Lite (64-bit)** — Bookworm (Debian 12) — to the SD card using Raspberry Pi Imager.
+1. Flash **Raspberry Pi OS Lite (64-bit)** — Trixie (Debian 13) or Bookworm (Debian 12) — to the SD card using Raspberry Pi Imager.
    Use **Lite**, not Desktop: the desktop environment wastes ~200–300MB RAM since the kiosk replaces it with xinit + openbox anyway.
-   Use **Bookworm**, not Trixie: Bookworm is stable and the `chromium` package is well-tested there.
+   Trixie is the current default in Raspberry Pi Imager and works correctly with this setup.
 
    In the Imager advanced settings, configure:
    - **SSH**: enable
@@ -26,7 +26,12 @@ Steps to set up a new Raspberry Pi kiosk from scratch.
    ssh jeff@<ip-address>
    ```
 
-4. Install the GitHub CLI and authenticate (required to clone private repos):
+4. Allow passwordless sudo (required for scripted installs):
+   ```bash
+   echo "jeff ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/nopasswd-jeff
+   ```
+
+5. Install the GitHub CLI and authenticate (required to clone private repos):
    ```bash
    curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
    sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
@@ -37,23 +42,18 @@ Steps to set up a new Raspberry Pi kiosk from scratch.
    > Use a **classic** Personal Access Token (not fine-grained) with `repo` scope.
    > Fine-grained tokens cannot access private repos owned by other accounts (e.g. softsystems).
 
-5. Clone the kiosk config repo:
+6. Clone the kiosk config repo:
    ```bash
    gh repo clone HawkinsJM/pi-one-screen-kiosk
    ```
 
-6. Run the setup script (installs all packages, fonts, services, and clones softsystems):
+7. Run the setup script (installs all packages, fonts, services, and clones softsystems):
    ```bash
    cd pi-one-screen-kiosk && bash setup.sh
    ```
    > The script regenerates SSH host keys — this is only needed when duplicating an SD card image.
    > For a fresh flash it's harmless but will cause a host key warning on your next SSH connection.
    > Skip it if you prefer by pressing Ctrl+C when prompted, then re-running from the next step.
-
-7. Disable the desktop display manager so the kiosk can own the display:
-   ```bash
-   sudo systemctl disable --now lightdm
-   ```
 
 8. Edit the kiosk config to set which sites show on each screen:
    ```bash
@@ -75,3 +75,4 @@ The kiosk service will start automatically on reboot.
 | — | helen2 | 10.html | 11.html |
 | — | helen3 | 12.html | 13.html |
 | — | helen4 | 14.html | 15.html |
+| — | helen5 | 15.html | — |
