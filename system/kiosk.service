@@ -1,0 +1,16 @@
+[Unit]
+Description=Dual HDMI Kiosk Display
+After=network.target nginx.service systemd-user-sessions.service
+Wants=nginx.service
+
+[Service]
+User=jeff
+Group=jeff
+Environment=HOME=/home/jeff
+ExecStart=/usr/bin/xinit /home/jeff/kiosk-start.sh -- :0 -nolisten tcp vt7
+ExecStop=/usr/bin/pkill -u jeff chromium ; /usr/bin/pkill -u jeff Xorg
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
