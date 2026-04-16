@@ -9,9 +9,9 @@ Steps to set up a new Raspberry Pi kiosk from scratch.
 
 ## Steps
 
-1. Flash **Raspberry Pi OS Lite (64-bit)** — Bookworm (Debian 12) — to the SD card using Raspberry Pi Imager.
+1. Flash **Raspberry Pi OS Lite (64-bit)** — Trixie (Debian 13) or Bookworm (Debian 12) — to the SD card using Raspberry Pi Imager.
    Use **Lite**, not Desktop: the desktop environment wastes ~200–300MB RAM since the kiosk replaces it with xinit + openbox anyway.
-   Use **Bookworm**, not Trixie: Bookworm is stable and the `chromium` package is well-tested there.
+   Trixie is the current default in Raspberry Pi Imager and works correctly with this setup.
 
    In the Imager advanced settings, configure:
    - **SSH**: enable
@@ -50,17 +50,12 @@ Steps to set up a new Raspberry Pi kiosk from scratch.
    > For a fresh flash it's harmless but will cause a host key warning on your next SSH connection.
    > Skip it if you prefer by pressing Ctrl+C when prompted, then re-running from the next step.
 
-7. Disable the desktop display manager so the kiosk can own the display:
-   ```bash
-   sudo systemctl disable --now lightdm
-   ```
-
-8. Edit the kiosk config to set which sites show on each screen:
+7. Edit the kiosk config to set which sites show on each screen:
    ```bash
    nano ~/kiosk.conf
    ```
 
-9. Reboot:
+8. Reboot:
     ```bash
     sudo reboot
     ```
@@ -75,3 +70,4 @@ The kiosk service will start automatically on reboot.
 | — | helen2 | 10.html | 11.html |
 | — | helen3 | 12.html | 13.html |
 | — | helen4 | 14.html | 15.html |
+| — | helen5 | ?.html | — |
