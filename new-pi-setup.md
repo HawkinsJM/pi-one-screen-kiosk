@@ -4,12 +4,15 @@ Steps to set up a new Raspberry Pi kiosk from scratch.
 
 ## Requirements
 - Raspberry Pi 4
-- Two micro-HDMI cables and monitors
+- Micro-HDMI cable and monitor
 - SD card (32GB+)
 
 ## Steps
 
-1. Flash **Raspberry Pi OS (64-bit)** to the SD card using Raspberry Pi Imager.
+1. Flash **Raspberry Pi OS Lite (64-bit)** — Bookworm (Debian 12) — to the SD card using Raspberry Pi Imager.
+   Use **Lite**, not Desktop: the desktop environment wastes ~200–300MB RAM since the kiosk replaces it with xinit + openbox anyway.
+   Use **Bookworm**, not Trixie: Bookworm is stable and the `chromium` package is well-tested there.
+
    In the Imager advanced settings, configure:
    - **SSH**: enable
    - **Username**: `jeff`
