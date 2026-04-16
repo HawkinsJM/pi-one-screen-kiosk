@@ -38,6 +38,9 @@ sudo cp "$REPO_DIR/fonts/NotoSansEgyptianHieroglyphs-Regular.ttf" /usr/local/sha
 sudo cp "$REPO_DIR/system/fontconfig/01-apple-color-emoji.conf" /etc/fonts/conf.d/
 sudo fc-cache -f
 
+echo "==> Fixing boot config for HDMI hotplug detection..."
+sudo sed -i 's/^disable_fw_kms_setup=1/#disable_fw_kms_setup=1/' /boot/firmware/config.txt
+
 echo "==> Copying kiosk scripts..."
 cp "$REPO_DIR/kiosk-start.sh" ~/kiosk-start.sh
 cp "$REPO_DIR/kiosk-update.sh" ~/kiosk-update.sh
