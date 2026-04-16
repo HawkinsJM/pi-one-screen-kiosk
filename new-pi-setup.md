@@ -26,7 +26,12 @@ Steps to set up a new Raspberry Pi kiosk from scratch.
    ssh jeff@<ip-address>
    ```
 
-4. Install the GitHub CLI and authenticate (required to clone private repos):
+4. Allow passwordless sudo (required for scripted installs):
+   ```bash
+   echo "jeff ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/nopasswd-jeff
+   ```
+
+5. Install the GitHub CLI and authenticate (required to clone private repos):
    ```bash
    curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
    sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
@@ -37,12 +42,12 @@ Steps to set up a new Raspberry Pi kiosk from scratch.
    > Use a **classic** Personal Access Token (not fine-grained) with `repo` scope.
    > Fine-grained tokens cannot access private repos owned by other accounts (e.g. softsystems).
 
-5. Clone the kiosk config repo:
+6. Clone the kiosk config repo:
    ```bash
    gh repo clone HawkinsJM/pi-one-screen-kiosk
    ```
 
-6. Run the setup script (installs all packages, fonts, services, and clones softsystems):
+7. Run the setup script (installs all packages, fonts, services, and clones softsystems):
    ```bash
    cd pi-one-screen-kiosk && bash setup.sh
    ```
@@ -50,12 +55,12 @@ Steps to set up a new Raspberry Pi kiosk from scratch.
    > For a fresh flash it's harmless but will cause a host key warning on your next SSH connection.
    > Skip it if you prefer by pressing Ctrl+C when prompted, then re-running from the next step.
 
-7. Edit the kiosk config to set which sites show on each screen:
+8. Edit the kiosk config to set which sites show on each screen:
    ```bash
    nano ~/kiosk.conf
    ```
 
-8. Reboot:
+9. Reboot:
     ```bash
     sudo reboot
     ```
